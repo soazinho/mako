@@ -112,7 +112,7 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm test:ci
+        run: npm run test:ci
 
       - name: Generate coverage report
         run: npm run coverage
