@@ -1,6 +1,7 @@
 import { data } from "react-router";
 import { cacheHeader } from "pretty-cache-header";
 import { z } from "zod";
+
 import type { Route } from "./+types/locales";
 
 import resources from "~/locales";
