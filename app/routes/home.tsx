@@ -2,6 +2,8 @@ import type { Route } from "./+types/home";
 
 import { Welcome } from "~/components/welcome/welcome";
 import { LanguageSwitcher } from "~/components/language-switcher";
+import { authMiddleware } from "~/middlewares/auth";
+import { userContext } from "~/context";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -10,11 +12,19 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export default function Home() {
+export const middleware: Route.MiddlewareFunction[] = [authMiddleware];
+
+export async function loader({ context }: Route.LoaderArgs) {
+  const user = context.get(userContext);
+  return { user };
+}
+
+export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <LanguageSwitcher />
       <Welcome />
+      {loaderData.user?.name}
     </>
   );
 }

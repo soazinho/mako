@@ -7,7 +7,6 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
@@ -16,7 +15,7 @@ import { FieldGroup, Field } from "./ui/field";
 const languages = [
   { label: "English", value: "en" },
   { label: "French", value: "fr" },
-  { label: "Portugues", value: "pt" },
+  { label: "Portuguese", value: "pt" },
 ] as const;
 
 const formSchema = z.object({
