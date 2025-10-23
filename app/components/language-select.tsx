@@ -39,10 +39,11 @@ export function LanguageSelect() {
       defaultValue={currentLanguage}
     >
       <SelectTrigger
+        name="language-select-trigger"
         id="select-language-form-trigger"
         className="min-w-[120px] ring-0 focus-visible:ring-transparent focus:ring-transparent focus-visible:ring-offset-0 focus-visible:ring-0"
       >
-        <SelectValue placeholder="Select" />
+        <SelectValue />
       </SelectTrigger>
 
       <SelectContent position="item-aligned">
