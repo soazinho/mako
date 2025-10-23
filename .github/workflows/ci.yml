@@ -80,7 +80,7 @@ jobs:
         with:
           version: latest
       - name: Run Biome
-        run: biome ci .
+        run: npm run quality:ci
 
   test:
     needs: install
@@ -112,7 +112,7 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm test
+        run: npm test:ci
 
       - name: Generate coverage report
         run: npm run coverage
