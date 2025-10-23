@@ -1,23 +1,37 @@
 import { render, screen } from "@testing-library/react";
-import { describe, test, expect } from "vitest";
 import userEvent from "@testing-library/user-event";
-import { createRoutesStub } from "react-router";
+import { describe, expect, test } from "vitest";
 
-import Home from "~/routes/home";
+import { LanguageSelect } from "./language-select";
 
 describe("LanguageSelect", () => {
-  test("should display default language", async () => {
-    const user = userEvent.setup();
-    const Stub = createRoutesStub([
-      {
-        path: "/home",
-        Component: Home,
-      },
-    ]);
+	test("should display language select default language", async () => {
+		render(<LanguageSelect />);
 
-    render(<Stub initialEntries={["/home"]} />);
+		const select = screen.getByRole("combobox");
+		expect(select).toHaveTextContent("English");
+	});
 
-    const select = screen.getByRole("combobox");
-    expect(select).toHaveTextContent("English");
-  });
+	test("on language select click should display available languages", async () => {
+		render(<LanguageSelect />);
+		const selectTrigger = screen.getByRole("combobox");
+
+		await userEvent.click(selectTrigger);
+
+		const options = screen.queryAllByRole("option");
+		expect(options.length).toBeGreaterThan(0);
+	});
+
+	test("on select language selected should display the language", async () => {
+		render(<LanguageSelect />);
+		const selectTrigger = screen.getByRole("combobox");
+		await userEvent.click(selectTrigger);
+		const frenchOption = screen.getByRole("option", {
+			name: /french/i,
+		});
+
+		await userEvent.click(frenchOption);
+
+		expect(selectTrigger).toHaveTextContent(/french/i);
+	});
 });
