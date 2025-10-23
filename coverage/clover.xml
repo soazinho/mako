@@ -1,10 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761195830047" clover="3.2.0">
-  <project timestamp="1761195830047" name="All files">
-    <metrics statements="105" coveredstatements="15" conditionals="43" coveredconditionals="5" methods="50" coveredmethods="10" elements="198" coveredelements="30" complexity="0" loc="105" ncloc="105" packages="9" files="21" classes="21"/>
+<coverage generated="1761196357044" clover="3.2.0">
+  <project timestamp="1761196357044" name="All files">
+    <metrics statements="149" coveredstatements="15" conditionals="67" coveredconditionals="5" methods="66" coveredmethods="10" elements="282" coveredelements="30" complexity="0" loc="149" ncloc="149" packages="6" files="17" classes="17"/>
     <package name="app">
-      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="app.css" path="/Users/soazinho/mako/app/app.css">
+      <metrics statements="44" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="16" coveredmethods="0"/>
+      <file name="entry.client.tsx" path="/Users/soazinho/mako/app/entry.client.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+      </file>
+      <file name="entry.server.tsx" path="/Users/soazinho/mako/app/entry.server.tsx">
+        <metrics statements="21" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="78" count="0" type="stmt"/>
+      </file>
+      <file name="root.tsx" path="/Users/soazinho/mako/app/root.tsx">
+        <metrics statements="19" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="88" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+      </file>
+      <file name="routes.ts" path="/Users/soazinho/mako/app/routes.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
@@ -131,41 +184,11 @@
     </package>
     <package name="app.components.welcome">
       <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
-      <file name="logo-dark.svg" path="/Users/soazinho/mako/app/components/welcome/logo-dark.svg">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      </file>
-      <file name="logo-light.svg" path="/Users/soazinho/mako/app/components/welcome/logo-light.svg">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      </file>
       <file name="welcome.tsx" path="/Users/soazinho/mako/app/components/welcome/welcome.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
-      </file>
-    </package>
-    <package name="app.locales">
-      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="index.ts" path="/Users/soazinho/mako/app/locales/index.ts">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      </file>
-    </package>
-    <package name="app.locales.en">
-      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="index.ts" path="/Users/soazinho/mako/app/locales/en/index.ts">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      </file>
-      <file name="translation.ts" path="/Users/soazinho/mako/app/locales/en/translation.ts">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      </file>
-    </package>
-    <package name="app.locales.fr">
-      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="index.ts" path="/Users/soazinho/mako/app/locales/fr/index.ts">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      </file>
-      <file name="translation.ts" path="/Users/soazinho/mako/app/locales/fr/translation.ts">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
     <package name="app.middlewares">

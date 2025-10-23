@@ -16,8 +16,8 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts"],
 
     coverage: {
-      include: ["app/**/*"],
-      exclude: ["app/*.{ts,tsx}", "app/lib/**", "app/types/**"],
+      include: ["app/**/*.{ts,tsx}"],
+      exclude: ["app/lib/**", "app/types/**", "app/locales/**"],
     },
   },
 });
