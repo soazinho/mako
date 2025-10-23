@@ -1,8 +1,5 @@
 import type { Route } from "./+types/home";
 
-import { Welcome } from "~/components/welcome/welcome";
-import { authMiddleware } from "~/middlewares/auth";
-import { userContext } from "~/context";
 import { LanguageSelect } from "~/components/language-select";
 
 export function meta({}: Route.MetaArgs) {
@@ -12,20 +9,10 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export const middleware: Route.MiddlewareFunction[] = [authMiddleware];
-
-export async function loader({ context }: Route.LoaderArgs) {
-  const user = context.get(userContext);
-
-  return { user };
-}
-
-export default function Home({ loaderData }: Route.ComponentProps) {
+export default function Home() {
   return (
     <>
       <LanguageSelect />
-      <Welcome />
-      {loaderData.user?.name}
     </>
   );
 }
