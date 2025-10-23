@@ -1,5 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -10,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { FieldGroup, Field } from "./ui/field";
 import { useTranslation } from "react-i18next";
 
 const languages = [
@@ -25,13 +22,6 @@ const formSchema = z.object({
 export function LanguageSelect() {
   const { i18n, t } = useTranslation();
   const currentLanguage = i18n.language;
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      language: currentLanguage,
-    },
-  });
 
   async function selectLanguage(data: z.infer<typeof formSchema>) {
     try {
