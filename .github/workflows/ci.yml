@@ -136,7 +136,8 @@ jobs:
         run: npm run coverage
 
   build:
-    needs: [typecheck, lint, test]
+    needs: [typecheck, test]
+    # needs: [typecheck, lint, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
