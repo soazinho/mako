@@ -1,9 +1,9 @@
 import type { Route } from "./+types/home";
 
 import { Welcome } from "~/components/welcome/welcome";
-import { LanguageSwitcher } from "~/components/language-switcher";
 import { authMiddleware } from "~/middlewares/auth";
 import { userContext } from "~/context";
+import { LanguageSelect } from "~/components/language-select";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -23,7 +23,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <>
-      <LanguageSwitcher />
+      <LanguageSelect />
       <Welcome />
       {loaderData.user?.name}
     </>
