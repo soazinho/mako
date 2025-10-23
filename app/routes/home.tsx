@@ -16,6 +16,7 @@ export const middleware: Route.MiddlewareFunction[] = [authMiddleware];
 
 export async function loader({ context }: Route.LoaderArgs) {
   const user = context.get(userContext);
+
   return { user };
 }
 

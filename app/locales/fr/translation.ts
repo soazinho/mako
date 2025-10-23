@@ -1,4 +1,9 @@
 export default {
   title: "Mako",
   description: "Des applications simples qui répondent à vos besoins.",
+
+  selectLanguage: {
+    success: "Votre préférence de langue a été changée.",
+    error: "Une erreur a survenu lors du changement de langue.",
+  },
 } satisfies typeof import("~/locales/en/translation").default;

@@ -11,6 +11,8 @@ import {
   SelectValue,
 } from "./ui/select";
 import { FieldGroup, Field } from "./ui/field";
+import { useTranslation } from "react-i18next";
+import type { Translations } from "~/types/translations";
 
 const languages = [
   { label: "English", value: "en" },
@@ -23,8 +25,6 @@ const formSchema = z.object({
 });
 
 export function LanguageSwitcher() {
-  // const { i18n, t } = useTranslation();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,10 +35,9 @@ export function LanguageSwitcher() {
   async function changeLanguage(data: z.infer<typeof formSchema>) {
     try {
       // await i18n.changeLanguage(data.language);
-
-      toast.success(t("languages.switch"));
+      // toast.success(translations["success"]);
     } catch {
-      toast.error(t("languages.switchError"));
+      // toast.error(translations["error"]);
     }
     toast("You submitted the following values:", {
       description: (
