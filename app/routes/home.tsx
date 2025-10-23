@@ -1,13 +1,20 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+
+import { Welcome } from "~/components/welcome/welcome";
+import { LanguageSwitcher } from "~/components/language-switcher";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Mako" },
+    { name: "description", content: "Welcome to Mako!" },
   ];
 }
 
 export default function Home() {
-  return <Welcome />;
+  return (
+    <>
+      <LanguageSwitcher />
+      <Welcome />
+    </>
+  );
 }
