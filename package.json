@@ -7,7 +7,10 @@
 		"dev": "react-router dev",
 		"start": "react-router-serve ./build/server/index.js",
 		"typecheck": "react-router typegen && tsc",
-		"quality:ci": "biome ci .",
+		"lint": "npx @biomejs/biome lint --write",
+		"lint:ci": "biome ci .",
+		"format": "npx @biomejs/biome format --write",
+		"check": "npx @biomejs/biome check --write",
 		"test": "vitest",
 		"test:ci": "vitest run",
 		"coverage": "vitest run --coverage"
