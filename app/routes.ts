@@ -13,7 +13,9 @@ export default [
 		route("register", "routes/auth/register.tsx"),
 	]),
 
-	route("protected", "routes/protected.tsx"),
+	layout("routes/__protected/layout.tsx", [
+		route("protected", "routes/__protected/protected.tsx"),
+	]),
 
 	route("api/locales/:lng/:ns", "routes/locales.ts"),
 ] satisfies RouteConfig;
