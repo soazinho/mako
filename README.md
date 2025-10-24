@@ -9,7 +9,9 @@ A modern, production-ready full-stack application using React Router.
 - 📦 Asset Bundling and Optimization
 - 🔄 Data Loading and Mutations
 - 🔒 TypeScript by default
+- 💎 Zod Schema Validation 
 - 💅 TailwindCSS + shadcn/ui for styling
+- 🐘 PostgreSQL with Drizzle ORM
 - 👮 Lint + Formatting with Biome
 - 🗣️ Internationalization with i18n
 - 🚀 Continous Integration + Continous Delivery (CI/CD)
