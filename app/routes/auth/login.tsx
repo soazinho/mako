@@ -1,5 +1,4 @@
 import { GalleryVerticalEnd } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import {
@@ -7,7 +6,6 @@ import {
 	FieldDescription,
 	FieldGroup,
 	FieldLabel,
-	FieldSeparator,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 
