@@ -13,7 +13,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 export default function Protected({ loaderData }: Route.ComponentProps) {
 	return (
 		<div>
-			<h1>Welcome {loaderData.user?.email}!</h1>
+			<h1>Welcome {loaderData?.email}!</h1>
 		</div>
 	);
 }
