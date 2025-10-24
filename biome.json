@@ -9,10 +9,12 @@
 		"includes": [
 			"**",
 			"app/**",
+			"!app/app.css",
 			"!coverage",
 			"!.react-router",
 			"!node_modules",
-			"!drizzle"
+			"!drizzle",
+			"!biome.json"
 		],
 		"ignoreUnknown": false
 	},
