@@ -4,7 +4,7 @@ A modern, production-ready full-stack application using React Router.
 
 ## Features
 
-- ⛓️ server-side Rendering (SSR)
+- ⛓️ Server-side Rendering (SSR)
 - ⚡️ Hot Module Replacement (HMR)
 - 📦 Asset Bundling and Optimization
 - 🔄 Data Loading and Mutations
