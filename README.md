@@ -4,12 +4,13 @@ A modern, production-ready full-stack application using React Router.
 
 ## Features
 
-- 🚀 Server-side Rendering
+- ⛓️ server-side Rendering (SSR)
 - ⚡️ Hot Module Replacement (HMR)
 - 📦 Asset Bundling and Optimization
 - 🔄 Data Loading and Mutations
 - 🔒 TypeScript by default
-- 🎉 TailwindCSS + shadcn/ui for styling
+- 💅 TailwindCSS + shadcn/ui for styling
+- 👮 Lint + Formatting with Biome
 - 🗣️ Internationalization with i18n
 - 🚀 Continous Integration + Continous Delivery (CI/CD)
 
