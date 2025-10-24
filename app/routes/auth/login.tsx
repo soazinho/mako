@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GalleryVerticalEnd } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, redirect, useSubmit } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -13,6 +13,10 @@ import {
 	FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { commitSession, getSession } from "~/server/session.server";
+import { login } from "~/server/user.server";
+
+import type { Route } from "./+types/login";
 
 export function meta() {
 	return [{ title: "Mako" }, { name: "description", content: "Mako - Login" }];
@@ -25,7 +29,39 @@ const loginFormSchema = z.object({
 		.min(8, { message: "Password must be at least 8 characters." }),
 });
 
+export async function action({ request }: Route.ActionArgs) {
+	const session = await getSession(request.headers.get("Cookie"));
+
+	const form = await request.formData();
+	const email = form.get("email")?.toString() || "";
+	const password = form.get("password")?.toString() || "";
+
+	const user = await login({ email, password });
+	const userId = user?.id;
+
+	if (userId == null) {
+		session.flash("error", "Invalid username/password.");
+
+		// Redirect back to the login page with errors.
+		return redirect("/login", {
+			headers: {
+				"Set-Cookie": await commitSession(session),
+			},
+		});
+	}
+
+	session.set("userId", userId.toString());
+
+	// Login succeeded, send them to the protected page.
+	return redirect("/protected", {
+		headers: {
+			"Set-Cookie": await commitSession(session),
+		},
+	});
+}
+
 export default function LoginPage() {
+	const submit = useSubmit();
 	const form = useForm<z.infer<typeof loginFormSchema>>({
 		resolver: zodResolver(loginFormSchema),
 		defaultValues: {
@@ -34,8 +70,18 @@ export default function LoginPage() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof loginFormSchema>) {
-		toast.success(data.email);
+	async function onSubmit(data: z.infer<typeof loginFormSchema>) {
+		// TODO: DOES NOT WORK
+		try {
+			await submit(
+				{ email: data.email, password: data.password },
+				{ action: "/login", method: "post" },
+			);
+
+			toast.success("success");
+		} catch {
+			toast.error("error");
+		}
 	}
 
 	return (

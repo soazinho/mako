@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GalleryVerticalEnd } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { data, Link, redirect } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -13,6 +13,8 @@ import {
 	FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { register } from "~/server/user.server";
+import type { Route } from "./+types/register";
 
 export function meta() {
 	return [
@@ -28,6 +30,22 @@ const registerFormSchema = z.object({
 		.string()
 		.min(8, { message: "Password must be at least 8 characters." }),
 });
+
+export async function action({ request }: Route.ActionArgs) {
+	const form = await request.formData();
+	const name = form.get("name")?.toString() || "";
+	const email = form.get("email")?.toString() || "";
+	const password = form.get("password")?.toString() || "";
+
+	const existerUser = await register({ name, email, password });
+
+	if (existerUser !== null) {
+		// Redirect back to the login page with errors.
+		return data({ error: "User already exists." });
+	}
+
+	return redirect("/login");
+}
 
 export default function RegisterPage() {
 	const form = useForm<z.infer<typeof registerFormSchema>>({
