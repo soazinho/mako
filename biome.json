@@ -11,7 +11,8 @@
 			"app/**",
 			"!coverage",
 			"!.react-router",
-			"!node_modules"
+			"!node_modules",
+			"!drizzle"
 		],
 		"ignoreUnknown": false
 	},
