@@ -15,24 +15,31 @@ import {
 import { Input } from "~/components/ui/input";
 
 export function meta() {
-	return [{ title: "Mako" }, { name: "description", content: "Mako - Login" }];
+	return [
+		{ title: "Mako" },
+		{ name: "description", content: "Mako - Register" },
+	];
 }
 
-const loginFormSchema = z.object({
+const registerFormSchema = z.object({
+	name: z.string().min(2, { message: "Name must be at least 5 characters." }),
 	email: z.email(),
-	password: z.string().min(8),
+	password: z
+		.string()
+		.min(8, { message: "Password must be at least 8 characters." }),
 });
 
-export default function LoginPage() {
-	const form = useForm<z.infer<typeof loginFormSchema>>({
-		resolver: zodResolver(loginFormSchema),
+export default function RegisterPage() {
+	const form = useForm<z.infer<typeof registerFormSchema>>({
+		resolver: zodResolver(registerFormSchema),
 		defaultValues: {
+			name: "",
 			email: "",
 			password: "",
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof loginFormSchema>) {
+	function onSubmit(data: z.infer<typeof registerFormSchema>) {
 		toast.success(data.email);
 	}
 
@@ -54,10 +61,29 @@ export default function LoginPage() {
 								</Link>
 								<h1 className="text-xl font-bold">Welcome to Mako.</h1>
 								<FieldDescription>
-									Don&apos;t have an account?{" "}
-									<Link to="/register">Register</Link>
+									Already have an account? <Link to="/login">Login</Link>
 								</FieldDescription>
 							</div>
+
+							<Controller
+								name="name"
+								control={form.control}
+								render={({ field, fieldState }) => (
+									<Field data-invalid={fieldState.invalid}>
+										<FieldLabel htmlFor="name">Name</FieldLabel>
+										<Input
+											{...field}
+											type="text"
+											placeholder="Jane Doe"
+											aria-invalid={fieldState.invalid}
+											required
+										/>
+										{fieldState.invalid && (
+											<FieldError errors={[fieldState.error]} />
+										)}
+									</Field>
+								)}
+							/>
 
 							<Controller
 								name="email"
@@ -99,10 +125,11 @@ export default function LoginPage() {
 							/>
 
 							<Field>
-								<Button type="submit">Login</Button>
+								<Button type="submit">Register</Button>
 							</Field>
 						</FieldGroup>
 					</form>
+
 					<FieldDescription className="px-6 text-center">
 						By clicking continue, you agree to our{" "}
 						<Link to="#">Terms of Service</Link> and{" "}
