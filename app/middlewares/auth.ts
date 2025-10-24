@@ -2,7 +2,8 @@ import { data, type RouterContextProvider, redirect } from "react-router";
 import { userContext } from "~/contexts/context";
 import { commitSession, getSession } from "~/server/session.server";
 import { findUserById } from "~/server/user.server";
-import type { User } from "~/types/User";
+
+import type { User } from "~/types/user";
 
 export const authMiddleware = async ({
 	request,
