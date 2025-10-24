@@ -1,11 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { Link, Outlet, redirect } from "react-router";
 import { LanguageSelect } from "~/components/language-select";
+import { Button } from "~/components/ui/button";
 import { userContext } from "~/contexts/context";
 import { authMiddleware } from "~/middlewares/auth";
 import { destroySession, getSession } from "~/server/session.server";
-
 import type { Route } from "./+types/layout";
+
+export const middleware = [authMiddleware];
 
 export async function action({ request }: Route.ActionArgs) {
 	const session = await getSession(request.headers.get("Cookie"));
@@ -15,8 +17,6 @@ export async function action({ request }: Route.ActionArgs) {
 		},
 	});
 }
-
-export const middleware = [authMiddleware];
 
 export async function loader({ context }: Route.LoaderArgs) {
 	const user = context.get(userContext);
@@ -42,6 +42,10 @@ export default function ProtectedLayout() {
 					</Link>
 
 					<LanguageSelect />
+
+					<form method="post">
+						<Button>Logout</Button>
+					</form>
 				</nav>
 			</header>
 
