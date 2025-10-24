@@ -7,7 +7,7 @@ export const middleware = [authMiddleware];
 
 export async function loader({ context }: Route.LoaderArgs) {
 	const user = context.get(userContext);
-	return { user };
+	return user;
 }
 
 export default function Protected({ loaderData }: Route.ComponentProps) {

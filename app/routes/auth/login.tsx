@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GalleryVerticalEnd } from "lucide-react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link, redirect, useSubmit } from "react-router";
+import { data, Form, Link, redirect } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -15,7 +16,6 @@ import {
 import { Input } from "~/components/ui/input";
 import { commitSession, getSession } from "~/server/session.server";
 import { login } from "~/server/user.server";
-
 import type { Route } from "./+types/login";
 
 export function meta() {
@@ -40,10 +40,10 @@ export async function action({ request }: Route.ActionArgs) {
 	const userId = user?.id;
 
 	if (userId == null) {
-		session.flash("error", "Invalid username/password.");
+		session.flash("error", "Invalid email/password.");
 
-		// Redirect back to the login page with errors.
-		return redirect("/login", {
+		return data({
+			error: "Invalid email AND/OR password.",
 			headers: {
 				"Set-Cookie": await commitSession(session),
 			},
@@ -60,8 +60,7 @@ export async function action({ request }: Route.ActionArgs) {
 	});
 }
 
-export default function LoginPage() {
-	const submit = useSubmit();
+export default function LoginPage({ actionData }: Route.ComponentProps) {
 	const form = useForm<z.infer<typeof loginFormSchema>>({
 		resolver: zodResolver(loginFormSchema),
 		defaultValues: {
@@ -70,25 +69,20 @@ export default function LoginPage() {
 		},
 	});
 
-	async function onSubmit(data: z.infer<typeof loginFormSchema>) {
-		// TODO: DOES NOT WORK
-		try {
-			await submit(
-				{ email: data.email, password: data.password },
-				{ action: "/login", method: "post" },
-			);
-
-			toast.success("success");
-		} catch {
-			toast.error("error");
+	useEffect(() => {
+		if (actionData?.error) {
+			toast.error("Error while login.", {
+				description: actionData?.error,
+				duration: 2000,
+			});
 		}
-	}
+	}, [actionData]);
 
 	return (
 		<div className="flex flex-col h-screen w-full">
 			<main className="flex flex-1 flex-col justify-center items-center">
 				<div className="flex flex-col gap-6">
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<Form method="post">
 						<FieldGroup>
 							<div className="flex flex-col items-center gap-2 text-center">
 								<Link
@@ -150,7 +144,7 @@ export default function LoginPage() {
 								<Button type="submit">Login</Button>
 							</Field>
 						</FieldGroup>
-					</form>
+					</Form>
 					<FieldDescription className="px-6 text-center">
 						By clicking continue, you agree to our{" "}
 						<Link to="#">Terms of Service</Link> and{" "}

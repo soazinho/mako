@@ -12,18 +12,19 @@ export const authMiddleware = async ({
 	request: Request;
 	context: RouterContextProvider;
 }) => {
-	const session = await getSession(request.headers.get("cookie"));
+	const session = await getSession(request.headers.get("Cookie"));
 	const userId = session.get("userId");
 
 	if (!userId) {
-		throw redirect("/login");
+		throw redirect("/login", {
+			headers: {
+				"Set-Cookie": await commitSession(session),
+			},
+		});
 	}
 
 	const user = await findUserById(userId);
-
-	if (!user) {
-		throw redirect("/login");
-	}
+	if (!user) return data({ error: "User in session not found." });
 
 	const appUser: User = {
 		id: user.id.toString(),
@@ -32,13 +33,4 @@ export const authMiddleware = async ({
 	};
 
 	context.set(userContext, appUser);
-
-	return data(
-		{ error: session.get("error") },
-		{
-			headers: {
-				"Set-Cookie": await commitSession(session),
-			},
-		},
-	);
 };

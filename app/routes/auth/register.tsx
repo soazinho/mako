@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GalleryVerticalEnd } from "lucide-react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { data, Link, redirect } from "react-router";
+import { data, Form, Link, redirect } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -47,7 +48,7 @@ export async function action({ request }: Route.ActionArgs) {
 	return redirect("/login");
 }
 
-export default function RegisterPage() {
+export default function RegisterPage({ actionData }: Route.ComponentProps) {
 	const form = useForm<z.infer<typeof registerFormSchema>>({
 		resolver: zodResolver(registerFormSchema),
 		defaultValues: {
@@ -57,15 +58,20 @@ export default function RegisterPage() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof registerFormSchema>) {
-		toast.success(data.email);
-	}
+	useEffect(() => {
+		if (actionData?.error) {
+			toast.error("Error while login.", {
+				description: actionData?.error,
+				duration: 2000,
+			});
+		}
+	}, [actionData]);
 
 	return (
 		<div className="flex flex-col h-screen w-full">
 			<main className="flex flex-1 flex-col justify-center items-center">
 				<div className="flex flex-col gap-6">
-					<form onSubmit={form.handleSubmit(onSubmit)}>
+					<Form method="post">
 						<FieldGroup>
 							<div className="flex flex-col items-center gap-2 text-center">
 								<Link
@@ -146,7 +152,7 @@ export default function RegisterPage() {
 								<Button type="submit">Register</Button>
 							</Field>
 						</FieldGroup>
-					</form>
+					</Form>
 
 					<FieldDescription className="px-6 text-center">
 						By clicking continue, you agree to our{" "}

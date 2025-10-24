@@ -36,6 +36,8 @@ export async function register({ name, email, password }: UserRegister) {
 		email: email,
 		hashedPassword,
 	});
+
+	return null;
 }
 
 export async function login({ email, password }: UserLogin) {
