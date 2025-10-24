@@ -6,7 +6,13 @@
 		"useIgnoreFile": false
 	},
 	"files": {
-		"includes": ["", "app/**", "!coverage", "!.react-router", "!node_modules"],
+		"includes": [
+			"**",
+			"app/**",
+			"!coverage",
+			"!.react-router",
+			"!node_modules"
+		],
 		"ignoreUnknown": false
 	},
 	"formatter": {
