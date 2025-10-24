@@ -14,6 +14,7 @@ export default function Protected({ loaderData }: Route.ComponentProps) {
 	return (
 		<div>
 			<h1>Welcome {loaderData?.email}!</h1>
+			<h2>Your email is {loaderData?.name}.</h2>
 		</div>
 	);
 }
