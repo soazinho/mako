@@ -34,6 +34,28 @@ npm run dev
 
 Your application will be available at `http://localhost:5173`.
 
+### Database
+
+## Local
+
+Create Postgres databse:
+
+```bash
+docker run --name drizzle-postgres -e POSTGRES_PASSWORD=coucou007 -d -p 5432:5432 postgres
+```
+
+Generate a migration:
+
+```bash
+npx drizzle-kit generate --name <MIGRATION_NAME>
+```
+
+Apply migrations:
+
+```bash
+npx drizzle-kit migrate
+```
+
 ## Building for Production
 
 Create a production build:
