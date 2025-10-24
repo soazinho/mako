@@ -22,7 +22,7 @@ describe("LanguageSelect", () => {
 		expect(options.length).toBeGreaterThan(0);
 	});
 
-	test("on select language selected should display the language", async () => {
+	test("on language selected should display the language", async () => {
 		render(<LanguageSelect />);
 		const selectTrigger = screen.getByRole("combobox");
 		await userEvent.click(selectTrigger);
