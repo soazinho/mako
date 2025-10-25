@@ -36,8 +36,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-	const user = context.get(userContext);
-	return user;
+	return context.get(userContext);
 }
 
 export default function Protected({ loaderData }: Route.ComponentProps) {
