@@ -5,16 +5,17 @@ A modern, production-ready full-stack application using React Router.
 ## Features
 
 - ⛓️ Server-side Rendering (SSR)
+- 🔒 TypeScript by default
+- 🐘 PostgreSQL with Drizzle ORM
+- 🚀 Continous Integration + Continous Delivery (CI/CD)
+- 🧪 Testing with Vitest + Testing Library
+- 💎 Zod Schema Validation 
+- 💅 TailwindCSS + shadcn/ui for styling
+- 👮 Lint + Formatting with Biome
+- 🗣️ Internationalization with i18n
 - ⚡️ Hot Module Replacement (HMR)
 - 📦 Asset Bundling and Optimization
 - 🔄 Data Loading and Mutations
-- 🔒 TypeScript by default
-- 💎 Zod Schema Validation 
-- 💅 TailwindCSS + shadcn/ui for styling
-- 🐘 PostgreSQL with Drizzle ORM
-- 👮 Lint + Formatting with Biome
-- 🗣️ Internationalization with i18n
-- 🚀 Continous Integration + Continous Delivery (CI/CD)
 
 ## Getting Started
 
