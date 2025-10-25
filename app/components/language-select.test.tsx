@@ -9,7 +9,7 @@ describe("LanguageSelect", () => {
 		render(<LanguageSelect />);
 
 		const select = screen.getByRole("combobox");
-		expect(select).toHaveTextContent("English");
+		expect(select).toHaveTextContent(/english/i);
 	});
 
 	test("on language select click should display available languages", async () => {

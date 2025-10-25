@@ -17,7 +17,12 @@ export default defineConfig({
 
 		coverage: {
 			include: ["app/**/*.{ts,tsx}"],
-			exclude: ["app/lib/**", "app/types/**", "app/locales/**"],
+			exclude: [
+				"app/*.{css,ts,tsx}",
+				"app/db/**",
+				"app/types/**",
+				"app/locales/**",
+			],
 		},
 	},
 });

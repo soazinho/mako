@@ -2,11 +2,20 @@ import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
 import { LanguageSelect } from "~/components/language-select";
 import { Button } from "~/components/ui/button";
+import {
+	Card,
+	CardAction,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "~/components/ui/card";
+import { Input } from "~/components/ui/input";
 import { userContext } from "~/contexts/context";
 import { authMiddleware } from "~/middlewares/auth";
 import { destroySession, getSession } from "~/server/session.server";
-
 import type { Route } from "./+types/protected";
+import { Label } from "~/components/ui/label";
 
 export function meta() {
 	return [
@@ -31,7 +40,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 	return user;
 }
 
-export default function Protected() {
+export default function Protected({ loaderData }: Route.ComponentProps) {
 	const { t } = useTranslation();
 
 	return (
@@ -57,11 +66,46 @@ export default function Protected() {
 				</nav>
 			</header>
 
-			<main className="flex flex-1 flex-col justify-center items-center">
-				<h1 className="text-4xl font-bold">{t("slogans.main")}</h1>
-				<div>
-					<p className="text-lg">{t("slogans.sub")}</p>
-				</div>
+			<main className="">
+				<Card className="w-full max-w-sm">
+					<CardHeader>
+						<CardTitle>{loaderData?.name}</CardTitle>
+						<CardDescription>Developer</CardDescription>
+						<CardAction>
+							<Button variant="link">Sign Up</Button>
+						</CardAction>
+					</CardHeader>
+					<CardContent>
+						<form>
+							<div className="flex flex-col gap-6">
+								<div className="grid gap-2">
+									<Label htmlFor="email">Email</Label>
+									<Input type="email" placeholder="m@example.com" required />
+								</div>
+								<div className="grid gap-2">
+									<div className="flex items-center">
+										<Label htmlFor="password">Password</Label>
+										<Link
+											to="#"
+											className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+										>
+											Forgot your password?
+										</Link>
+									</div>
+									<Input type="password" required />
+								</div>
+							</div>
+						</form>
+					</CardContent>
+					{/*<CardFooter className="flex-col gap-2">
+						<Button type="submit" className="w-full">
+							Login
+						</Button>
+						<Button variant="outline" className="w-full">
+							Login with Google
+						</Button>
+					</CardFooter>*/}
+				</Card>
 			</main>
 		</div>
 	);
