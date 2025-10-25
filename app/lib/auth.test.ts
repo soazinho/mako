@@ -3,21 +3,28 @@ import { describe, expect, test } from "vitest";
 import { hasPermission, roles } from "./auth";
 
 describe("hasPermission", () => {
-	test("should return false when role is less than required role", () => {
-		const result = hasPermission(roles.USER, roles.ADMIN);
+	test.each([
+		{
+			input: { role: roles.USER, requiredRole: roles.ADMIN },
+			expectedResult: false,
+			condition: "less than",
+		},
+		{
+			input: { role: roles.ADMIN, requiredRole: roles.ADMIN },
+			expectedResult: true,
+			condition: "equal to",
+		},
+		{
+			input: { role: roles.ADMIN, requiredRole: roles.USER },
+			expectedResult: true,
+			condition: "greater than",
+		},
+	])(
+		`should return $expectedResult when role is $condition required role`,
+		({ input, expectedResult }) => {
+			const result = hasPermission(input.role, input.requiredRole);
 
-		expect(result).toBe(false);
-	});
-
-	test("should return true when role is equal than required role", () => {
-		const result = hasPermission(roles.ADMIN, roles.ADMIN);
-
-		expect(result).toBe(true);
-	});
-
-	test("should return true when role greater than required role", () => {
-		const result = hasPermission(roles.ADMIN, roles.USER);
-
-		expect(result).toBe(true);
-	});
+			expect(result).toBe(expectedResult);
+		},
+	);
 });
