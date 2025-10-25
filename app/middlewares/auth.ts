@@ -27,9 +27,8 @@ export const authMiddleware = async ({
 	if (!user) return data({ error: "User in session not found." });
 
 	const appUser: User = {
+		...user,
 		id: user.id.toString(),
-		name: user.name,
-		email: user.email,
 	};
 
 	context.set(userContext, appUser);
