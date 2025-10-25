@@ -66,7 +66,7 @@ export default function Protected({ loaderData }: Route.ComponentProps) {
 				</nav>
 			</header>
 
-			<main className="">
+			<main className="flex flex-1 flex-col justify-center items-center">
 				<Card className="w-full max-w-sm">
 					<CardHeader>
 						<CardTitle>{loaderData?.name}</CardTitle>
