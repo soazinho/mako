@@ -5,7 +5,7 @@ import { describe, expect, test } from "vitest";
 import { LanguageSelect } from "./language-select";
 
 describe("LanguageSelect", () => {
-	test("should display language select default language", async () => {
+	test("should display language select default language", () => {
 		render(<LanguageSelect />);
 
 		const select = screen.getByRole("combobox");
