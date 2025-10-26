@@ -61,7 +61,7 @@ Apply migrations:
 npx drizzle-kit migrate
 ```
 
-## Building for Production
+## Going to Production
 
 Create a production build:
 
@@ -69,20 +69,24 @@ Create a production build:
 npm run build
 ```
 
-## Deployment
+## App Deployment
 
 ### Docker Deployment
 
 To build and run using Docker:
 
 ```bash
-docker build -t my-app .
+docker build -t mako .
 
 # Run the container
-docker run -p 3000:3000 my-app
+docker run -p 3000:3000 mako
 ```
 
-### DIY Deployment
+### Database Deployment
+
+WIP
+
+## DIY Deployment
 
 Make sure to deploy the output of `npm run build`
 
