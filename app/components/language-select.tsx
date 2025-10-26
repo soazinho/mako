@@ -10,8 +10,8 @@ import {
 } from "./ui/select";
 
 const languages = [
-	{ label: "English", value: "en" },
-	{ label: "French", value: "fr" },
+	{ label: "EN", value: "en" },
+	{ label: "FR", value: "fr" },
 ] as const;
 
 const formSchema = z.object({
@@ -39,11 +39,12 @@ export function LanguageSelect() {
 		>
 			<SelectTrigger
 				name="language-select-trigger"
-				className="min-w-[120px] cursor-pointer"
+				className="min-w-12 cursor-pointer"
 			>
 				<SelectValue />
 			</SelectTrigger>
 			<SelectContent
+				className="min-w-12 "
 				position="item-aligned"
 				onCloseAutoFocus={(e) => e.preventDefault()}
 			>

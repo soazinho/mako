@@ -2,10 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { data, Link, useFetcher } from "react-router";
+import { data, useFetcher } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
-import { LanguageSelect } from "~/components/language-select";
 import { Button } from "~/components/ui/button";
 import { Field, FieldError } from "~/components/ui/field";
 import { Textarea } from "~/components/ui/textarea";
@@ -68,25 +67,8 @@ export default function Home() {
 	}, [fetcher.data, fetcher.state, t]);
 
 	return (
-		<div className="flex flex-col h-screen">
-			<header className="flex justify-between px-16 py-4 border-b border-gray-200">
-				<Link to="/">
-					<span className="text-2xl font-bold">Mako</span>
-				</Link>
-
-				<nav className="flex justify-center items-center gap-6">
-					<Link to="/services" className="text-gray-700 hover:text-gray-900">
-						{t("services")}
-					</Link>
-					<Link to="/team" className="text-gray-700 hover:text-gray-900">
-						{t("team")}
-					</Link>
-
-					<LanguageSelect />
-				</nav>
-			</header>
-
-			<main className="flex flex-1 flex-col justify-center items-center gap-8">
+		<main className="flex flex-1 flex-col justify-center items-center gap-24">
+			<div className="flex flex-col items-center gap-4">
 				<h1 className="text-center text-6xl font-extrabold tracking-tight text-balance">
 					{t("slogans.main")}
 				</h1>
@@ -94,46 +76,45 @@ export default function Home() {
 				<div>
 					<p className="text-lg">{t("slogans.sub")}</p>
 				</div>
+			</div>
 
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="flex flex-col gap-4 m-8"
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="flex flex-col gap-10"
+			>
+				<Controller
+					name="message"
+					control={form.control}
+					render={({ field, fieldState }) => (
+						<Field
+							data-invalid={fieldState.invalid}
+							className="flex flex-col gap-4 "
+						>
+							<Textarea
+								{...field}
+								className="bg-white"
+								cols={50}
+								rows={7}
+								placeholder="Enter your message here..."
+								aria-invalid={fieldState.invalid}
+								required
+							/>
+							<p className="text-muted-foreground text-sm">
+								Your message will be sent to Mako team.
+							</p>
+							{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+						</Field>
+					)}
+				/>
+
+				<Button
+					disabled={!form.formState.isValid || busy}
+					className="cursor-pointer"
+					type="submit"
 				>
-					<Controller
-						name="message"
-						control={form.control}
-						render={({ field, fieldState }) => (
-							<Field
-								data-invalid={fieldState.invalid}
-								className="flex flex-col gap-4"
-							>
-								<Textarea
-									{...field}
-									cols={50}
-									rows={7}
-									placeholder="Enter your message here..."
-									aria-invalid={fieldState.invalid}
-									required
-								/>
-								<p className="text-muted-foreground text-sm">
-									Your message will be sent to Mako team.
-								</p>
-								{fieldState.invalid && (
-									<FieldError errors={[fieldState.error]} />
-								)}
-							</Field>
-						)}
-					/>
-
-					<Button
-						disabled={!form.formState.isValid || busy}
-						className="cursor-pointer"
-						type="submit"
-					>
-						{busy ? "..." : t("contactUs")}
-					</Button>
-				</form>
-			</main>
-		</div>
+					{busy ? "..." : t("contactUs")}
+				</Button>
+			</form>
+		</main>
 	);
 }

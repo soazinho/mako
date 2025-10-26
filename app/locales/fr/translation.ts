@@ -3,7 +3,7 @@ export default {
 	description: "Des applications simples qui répondent à vos besoins.",
 
 	services: "Services",
-	team: "Équipes",
+	team: "Équipe",
 
 	contactRequest: {
 		success: "Message envoyé!",
@@ -18,7 +18,7 @@ export default {
 	},
 
 	selectLanguage: {
-		success: "Votre préférence de langue a été changée.",
+		success: "Votre préférence de langue a été changée!",
 		error: "Une erreur a survenu lors du changement de langue.",
 	},
 } satisfies typeof import("~/locales/en/translation").default;

@@ -4,7 +4,7 @@ export function meta() {
 	return [{ title: "Mako" }, { name: "description", content: "Mako - About" }];
 }
 
-export default function Home() {
+export default function Team() {
 	const { t } = useTranslation();
 
 	return (
