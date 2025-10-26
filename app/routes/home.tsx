@@ -128,7 +128,11 @@ export default function Home() {
 						)}
 					/>
 
-					<Button disabled={busy} className="cursor-pointer" type="submit">
+					<Button
+						disabled={!form.formState.isValid || busy}
+						className="cursor-pointer"
+						type="submit"
+					>
 						{busy ? "..." : t("contactUs")}
 					</Button>
 				</form>
