@@ -17,7 +17,10 @@ const contactRequestSchema = z.object({
 });
 
 export function meta() {
-	return [{ title: "Mako" }, { name: "description", content: "Mako - Home" }];
+	return [
+		{ title: "Mako" },
+		{ name: "description", content: "Mako - Services" },
+	];
 }
 
 export async function action({ request }: Route.ActionArgs) {

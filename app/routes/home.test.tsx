@@ -1,21 +1,35 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { renderRoute } from "~/lib/test-utils";
 import Home from "./home";
 
 describe("Home", () => {
-	test("when contact request message is not long enough should display validation errors", async () => {
-		const mockSendEmail = vi.fn().mockResolvedValue({ success: true });
-		renderRoute(Home, "/", mockSendEmail);
+	describe("when contact request message is not long enough", () => {
+		beforeEach(() => {
+			const mockSendEmail = vi.fn().mockResolvedValue({ success: true });
+			renderRoute(Home, "/", mockSendEmail);
+		});
 
-		await writeContactRequestMessage("tiny");
+		test("should display validation errors", async () => {
+			await writeContactRequestMessage("tiny");
 
-		expect(
-			screen.getByText("Message must be at least 10 characters."),
-		).toBeInTheDocument();
-		const contactUsButton = screen.getByRole("button", { name: /contactUs/i });
-		expect(contactUsButton).toBeDisabled();
+			expect(
+				screen.getByText("Message must be at least 10 characters."),
+			).toBeInTheDocument();
+		});
+
+		test("should have the contactUs button disabled", async () => {
+			await writeContactRequestMessage("tiny");
+
+			expect(
+				screen.getByText("Message must be at least 10 characters."),
+			).toBeInTheDocument();
+			const contactUsButton = screen.getByRole("button", {
+				name: /contactUs/i,
+			});
+			expect(contactUsButton).toBeDisabled();
+		});
 	});
 
 	test("when send contact request loading should display three dots on button", async () => {

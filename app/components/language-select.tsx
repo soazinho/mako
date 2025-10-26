@@ -39,14 +39,20 @@ export function LanguageSelect() {
 		>
 			<SelectTrigger
 				name="language-select-trigger"
-				className="min-w-[120px] ring-0 focus-visible:ring-transparent focus:ring-transparent focus-visible:ring-offset-0 focus-visible:ring-0"
+				className="min-w-[120px] cursor-pointer"
 			>
 				<SelectValue />
 			</SelectTrigger>
-
-			<SelectContent position="item-aligned">
+			<SelectContent
+				position="item-aligned"
+				onCloseAutoFocus={(e) => e.preventDefault()}
+			>
 				{languages.map((language) => (
-					<SelectItem key={language.value} value={language.value}>
+					<SelectItem
+						key={language.value}
+						value={language.value}
+						className="cursor-pointer"
+					>
 						{language.label}
 					</SelectItem>
 				))}
