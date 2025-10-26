@@ -5,7 +5,7 @@ import { renderRoute } from "~/lib/test-utils";
 import Home from "./home";
 
 describe("Home", () => {
-	test("when contact request message is not long enough should display validation error", async () => {
+	test("when contact request message is not long enough should display validation errors", async () => {
 		const mockSendEmail = vi.fn().mockResolvedValue({ success: true });
 		renderRoute(Home, "/", mockSendEmail);
 
@@ -14,6 +14,8 @@ describe("Home", () => {
 		expect(
 			screen.getByText("Message must be at least 10 characters."),
 		).toBeInTheDocument();
+		const contactUsButton = screen.getByRole("button", { name: /contactUs/i });
+		expect(contactUsButton).toBeDisabled();
 	});
 
 	test("when send contact request loading should display three dots on button", async () => {
