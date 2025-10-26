@@ -1,6 +1,6 @@
 # Mako
 
-A modern, production-ready full-stack application using React Router.
+A modern, production-ready (not yet) full-stack application using React Router.
 
 ## Features
 
