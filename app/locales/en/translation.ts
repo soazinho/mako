@@ -5,6 +5,11 @@ export default {
 	services: "Services",
 	team: "Team",
 
+	contactRequest: {
+		success: "Contact request sent!",
+		error: "Error while sending contact request. Please try again later.",
+	},
+
 	contactUs: "Contact Us",
 
 	slogans: {

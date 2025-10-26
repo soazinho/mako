@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Link, useFetcher } from "react-router";
+import { data, Link, useFetcher } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { LanguageSelect } from "~/components/language-select";
@@ -9,7 +10,9 @@ import { Button } from "~/components/ui/button";
 import { Field, FieldError, FieldLabel } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { sendEmail } from "~/server/email.server";
+
 import type { Route } from "./+types/home";
+import { Textarea } from "~/components/ui/textarea";
 
 const contactRequestSchema = z.object({
 	message: z.string().min(10, "Message must be at least 10 characters."),
@@ -28,18 +31,25 @@ export async function action({ request }: Route.ActionArgs) {
 
 	try {
 		await sendEmail(message);
-		toast.success("Email sent successfully!");
+
+		return data({
+			success: true,
+			message: "Message successfully sent.",
+		});
 	} catch {
-		toast.error("Error occurred while sending message.");
+		return data({ success: false, message: "Failed to send message." });
 	}
 }
 
 export default function Home() {
 	const { t } = useTranslation();
+
 	const fetcher = useFetcher();
+	const busy = fetcher.state !== "idle";
 
 	const form = useForm<z.infer<typeof contactRequestSchema>>({
 		resolver: zodResolver(contactRequestSchema),
+		mode: "onChange",
 		defaultValues: {
 			message: "",
 		},
@@ -51,6 +61,16 @@ export default function Home() {
 			encType: "application/x-www-form-urlencoded",
 		});
 	}
+
+	useEffect(() => {
+		if (fetcher.data && fetcher.state === "idle") {
+			if (fetcher.data.success === true) {
+				toast.success(t("contactRequest.success"));
+			} else if (fetcher.data.success === false) {
+				toast.error(t("contactRequest.error"));
+			}
+		}
+	}, [fetcher.data, fetcher.state, t]);
 
 	return (
 		<div className="flex flex-col h-screen">
@@ -80,27 +100,39 @@ export default function Home() {
 					<p className="text-lg">{t("slogans.sub")}</p>
 				</div>
 
-				<form onSubmit={form.handleSubmit(onSubmit)}>
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="flex flex-col gap-4 m-8"
+				>
 					<Controller
 						name="message"
 						control={form.control}
 						render={({ field, fieldState }) => (
-							<Field data-invalid={fieldState.invalid}>
-								<FieldLabel htmlFor="message">Email</FieldLabel>
-								<Input
+							<Field
+								data-invalid={fieldState.invalid}
+								className="flex flex-col gap-4"
+							>
+								<Textarea
 									{...field}
-									type="text"
+									cols={50}
+									rows={10}
 									placeholder="Enter your message here..."
 									aria-invalid={fieldState.invalid}
 									required
 								/>
+								<p className="text-muted-foreground text-sm">
+									Your message will be sent to Mako team.
+								</p>
 								{fieldState.invalid && (
 									<FieldError errors={[fieldState.error]} />
 								)}
 							</Field>
 						)}
 					/>
-					<Button type="submit">{t("contactUs")}</Button>
+
+					<Button disabled={busy} className="cursor-pointer" type="submit">
+						{busy ? "..." : t("contactUs")}
+					</Button>
 				</form>
 			</main>
 		</div>

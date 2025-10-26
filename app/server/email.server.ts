@@ -11,7 +11,7 @@ export async function sendEmail(message: string) {
 		Content: {
 			Simple: {
 				Subject: {
-					Data: "Message",
+					Data: "Contact Request",
 					Charset: "UTF-8",
 				},
 				Body: {
