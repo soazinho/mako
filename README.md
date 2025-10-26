@@ -8,7 +8,7 @@ A modern, production-ready full-stack application using React Router.
 - 🔒 TypeScript by default
 - 🐘 PostgreSQL with Drizzle ORM
 - 🏗 Infra as Code (IaC) with Terraform (Open Tofu)
-- ✉️ AWS SES for receiving emails
+- ✉️ AWS with Amazon SES for email sending and receiving
 - 🚀 Continous Integration + Continous Delivery (CI/CD)
 - 🧪 Testing with Vitest + Testing Library
 - 💎 Zod Schema Validation
