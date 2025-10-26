@@ -1,11 +1,19 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { Link, useFetcher } from "react-router";
 import { toast } from "sonner";
+import { z } from "zod";
 import { LanguageSelect } from "~/components/language-select";
 import { Button } from "~/components/ui/button";
+import { Field, FieldError, FieldLabel } from "~/components/ui/field";
+import { Input } from "~/components/ui/input";
 import { sendEmail } from "~/server/email.server";
-
 import type { Route } from "./+types/home";
+
+const contactRequestSchema = z.object({
+	message: z.string().min(10, "Message must be at least 10 characters."),
+});
 
 export function meta() {
 	return [
@@ -28,6 +36,21 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function Home() {
 	const { t } = useTranslation();
+	const fetcher = useFetcher();
+
+	const form = useForm<z.infer<typeof contactRequestSchema>>({
+		resolver: zodResolver(contactRequestSchema),
+		defaultValues: {
+			message: "",
+		},
+	});
+
+	function onSubmit(data: z.infer<typeof contactRequestSchema>) {
+		fetcher.submit(data, {
+			method: "POST",
+			encType: "application/x-www-form-urlencoded",
+		});
+	}
 
 	return (
 		<div className="flex flex-col h-screen">
@@ -57,7 +80,28 @@ export default function Home() {
 					<p className="text-lg">{t("slogans.sub")}</p>
 				</div>
 
-				<Button type="submit">{t("contactUs")}</Button>
+				<form onSubmit={form.handleSubmit(onSubmit)}>
+					<Controller
+						name="message"
+						control={form.control}
+						render={({ field, fieldState }) => (
+							<Field data-invalid={fieldState.invalid}>
+								<FieldLabel htmlFor="message">Email</FieldLabel>
+								<Input
+									{...field}
+									type="text"
+									placeholder="Enter your message here..."
+									aria-invalid={fieldState.invalid}
+									required
+								/>
+								{fieldState.invalid && (
+									<FieldError errors={[fieldState.error]} />
+								)}
+							</Field>
+						)}
+					/>
+					<Button type="submit">{t("contactUs")}</Button>
+				</form>
 			</main>
 		</div>
 	);

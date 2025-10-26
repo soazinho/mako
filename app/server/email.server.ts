@@ -1,12 +1,12 @@
 import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
 
-const client = new SESv2Client({ region: "us-east-1" });
+const client = new SESv2Client({ region: "us-east-1", profile: "mako" });
 
 export async function sendEmail(message: string) {
 	const params = {
-		FromEmailAddress: "hugues.carlos.soares@gmail.com",
+		FromEmailAddress: "huguescarlos.soares@gmail.com",
 		Destination: {
-			ToAddresses: ["hugues.carlos.soares@gmail.com"],
+			ToAddresses: ["huguescarlos.soares@gmail.com"],
 		},
 		Content: {
 			Simple: {
@@ -15,8 +15,13 @@ export async function sendEmail(message: string) {
 					Charset: "UTF-8",
 				},
 				Body: {
+					Text: {
+						Data: `${message}`,
+						Charset: "UTF-8",
+					},
 					Html: {
 						Data: `
+						      <!DOCTYPE html>
                   <html>
                     <body>
                       <h1>Message</h1>
@@ -36,7 +41,9 @@ export async function sendEmail(message: string) {
 		const response = await client.send(command);
 
 		console.log("Message sent successfully!");
-		console.log(`Server responded with ${response}`);
+		console.log(
+			`Server responded with HTTP Status ${response.$metadata.httpStatusCode}`,
+		);
 	} catch (error) {
 		console.log(`Error occured: ${error}`);
 		throw error;

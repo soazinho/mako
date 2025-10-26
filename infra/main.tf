@@ -8,9 +8,10 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region  = "us-east-1"
+  profile = "mako"
 }
 
-resource "aws_vpc" "example" {
-  cidr_block = "10.0.0.0/16"
+resource "aws_ses_email_identity" "sender_email" {
+  email = "huguescarlos.soares@gmail.com"
 }
