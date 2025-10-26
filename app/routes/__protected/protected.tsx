@@ -15,6 +15,7 @@ import { Label } from "~/components/ui/label";
 import { userContext } from "~/contexts/context";
 import { authMiddleware } from "~/middlewares/auth";
 import { destroySession, getSession } from "~/server/session.server";
+
 import type { Route } from "./+types/protected";
 
 export function meta() {

@@ -15,6 +15,7 @@ import {
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { register } from "~/server/user.server";
+
 import type { Route } from "./+types/register";
 
 export function meta() {
