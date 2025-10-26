@@ -5,9 +5,11 @@ export default {
 	services: "Services",
 	team: "Équipes",
 
+	contactUs: "Contactez-nous",
+
 	slogans: {
-		main: "Des applications simples qui répondent à vos besoins.",
-		sub: "Contactez-nous pour plus d'informations.",
+		main: "Créons l'application qui répond à vos besoins.",
+		sub: "De la prise de vos besoins au MVP, jusqu'à une application maintenble et évolutive.",
 	},
 
 	selectLanguage: {
