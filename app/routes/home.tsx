@@ -7,12 +7,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { LanguageSelect } from "~/components/language-select";
 import { Button } from "~/components/ui/button";
-import { Field, FieldError, FieldLabel } from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { sendEmail } from "~/server/email.server";
-
-import type { Route } from "./+types/home";
+import { Field, FieldError } from "~/components/ui/field";
 import { Textarea } from "~/components/ui/textarea";
+import { sendEmail } from "~/server/email.server";
+import type { Route } from "./+types/home";
 
 const contactRequestSchema = z.object({
 	message: z.string().min(10, "Message must be at least 10 characters."),
