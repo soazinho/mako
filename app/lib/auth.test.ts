@@ -6,21 +6,21 @@ describe("hasPermission", () => {
 	test.each([
 		{
 			input: { role: roles.USER, requiredRole: roles.ADMIN },
-			expectedResult: false,
 			condition: "less than",
+			expectedResult: false,
 		},
 		{
 			input: { role: roles.ADMIN, requiredRole: roles.ADMIN },
-			expectedResult: true,
 			condition: "equal to",
+			expectedResult: true,
 		},
 		{
 			input: { role: roles.ADMIN, requiredRole: roles.USER },
-			expectedResult: true,
 			condition: "greater than",
+			expectedResult: true,
 		},
 	])(
-		`should return $expectedResult when role is $condition required role`,
+		`when role is $condition required role should return $expectedResult `,
 		({ input, expectedResult }) => {
 			const result = hasPermission(input.role, input.requiredRole);
 

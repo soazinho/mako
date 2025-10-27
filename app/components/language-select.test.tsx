@@ -8,30 +8,32 @@ describe("LanguageSelect", () => {
 	test("should display language select default language", () => {
 		render(<LanguageSelect />);
 
-		const select = screen.getByRole("combobox");
-		expect(select).toHaveTextContent(/en/i);
+		expect(ui.select()).toHaveTextContent(/en/i);
 	});
 
-	test("on language select click should display available languages", async () => {
+	test("when language select click should display available languages", async () => {
 		render(<LanguageSelect />);
-		const selectTrigger = screen.getByRole("combobox");
 
-		await userEvent.click(selectTrigger);
+		await userEvent.click(ui.select());
 
-		const options = screen.queryAllByRole("option");
-		expect(options.length).toBeGreaterThan(0);
+		expect(ui.selectOptions().length).toBeGreaterThan(0);
 	});
 
-	test("on language selected should display the language", async () => {
+	test("when language selected should display the language", async () => {
 		render(<LanguageSelect />);
-		const selectTrigger = screen.getByRole("combobox");
-		await userEvent.click(selectTrigger);
-		const frenchOption = screen.getByRole("option", {
-			name: /fr/i,
-		});
+		const select = ui.select();
+		await userEvent.click(select);
 
+		const frenchOption = ui.selectOption("FR");
 		await userEvent.click(frenchOption);
 
-		expect(selectTrigger).toHaveTextContent(/fr/i);
+		expect(select).toHaveTextContent(/fr/i);
 	});
 });
+
+const ui = {
+	select: () => screen.getByRole("combobox"),
+	selectOption: (optionName: string) =>
+		screen.getByRole("option", { name: optionName }),
+	selectOptions: () => screen.getAllByRole("option"),
+};
