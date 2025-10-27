@@ -1,81 +1,89 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { renderRoute } from "~/lib/test-utils";
+import Register from "./register";
 
 describe("Register", () => {
-	describe("when contact request message is not long enough", () => {
-		beforeEach(() => {
-			const mockSendEmail = vi.fn().mockResolvedValue({ success: true });
-			renderRoute(Home, "/", mockSendEmail);
+	describe("register form validation", () => {
+		test("name too short should display field error", async () => {
+			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
+			renderRoute(Register, "/", mockLogin);
+
+			const nameInput = screen.getByPlaceholderText(/Jane Doe/i);
+			await userEvent.type(nameInput, "1");
+
+			expect(screen.getByText(/form.nameTooShort/i)).toBeInTheDocument();
 		});
 
-		test("should display validation errors", async () => {
-			await writeContactRequestMessage("tiny");
+		test("email invalid should display field error", async () => {
+			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
+			renderRoute(Register, "/", mockLogin);
 
-			expect(
-				screen.getByText("Message must be at least 10 characters."),
-			).toBeInTheDocument();
+			const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
+			await userEvent.type(emailInput, "cwd");
+
+			expect(screen.getByText(/form.emailInvalid/i)).toBeInTheDocument();
 		});
 
-		test("should have the contactUs button disabled", async () => {
-			await writeContactRequestMessage("tiny");
+		test("password too short should display field error", async () => {
+			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
+			renderRoute(Register, "/", mockLogin);
 
-			expect(
-				screen.getByText("Message must be at least 10 characters."),
-			).toBeInTheDocument();
-			const contactUsButton = screen.getByRole("button", {
-				name: /contactUs/i,
-			});
-			expect(contactUsButton).toBeDisabled();
+			const passwordInput = screen.getByPlaceholderText("•••••••");
+			await userEvent.type(passwordInput, "tiny");
+
+			expect(screen.getByText("form.passwordTooShort")).toBeInTheDocument();
+		});
+
+		test("anyform field error should disable register button", async () => {
+			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
+			renderRoute(Register, "/", mockLogin);
+
+			const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
+			await userEvent.type(emailInput, "dwq");
+
+			const registerButton = screen.getByRole("button", { name: /register/i });
+			expect(registerButton).toBeDisabled();
 		});
 	});
 
-	test("when send contact request loading should display three dots on button", async () => {
-		const mockSendEmailLoading = vi
+	test("when register loading should disable register button", async () => {
+		const mockRegisterLoading = vi
 			.fn()
 			.mockImplementation(() => new Promise(() => {}));
-		renderRoute(Home, "/", mockSendEmailLoading);
+		renderRoute(Register, "/", mockRegisterLoading);
 
-		await writeContactRequestMessage("hi, what's up? tudo bem?");
+		const nameInput = screen.getByPlaceholderText(/Jane Doe/i);
+		const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
+		const passwordInput = screen.getByPlaceholderText("•••••••");
+		await userEvent.type(nameInput, "moakim");
+		await userEvent.type(emailInput, "hi, what's up? tudo bem?");
+		await userEvent.type(passwordInput, "leslicornes++");
 
-		const contactUsButton = screen.getByRole("button", { name: /contactUs/i });
-		await userEvent.click(contactUsButton);
+		const registerButton = screen.getByRole("button", { name: /register/i });
+		await userEvent.click(registerButton);
 
-		expect(contactUsButton).toHaveTextContent(/.../i);
+		expect(registerButton).toBeDisabled();
+		expect(registerButton).toHaveTextContent(/.../i);
 	});
 
-	test("when send contact request succeeds should display success toast", async () => {
-		const mockSendEmailSuccess = vi.fn().mockResolvedValue({ success: true });
-		renderRoute(Home, "/", mockSendEmailSuccess);
+	test("when register fails should display error toast", async () => {
+		const mockLoginError = vi
+			.fn()
+			.mockResolvedValue({ error: "an error occurred" });
+		renderRoute(Register, "/", mockLoginError);
 
-		await writeContactRequestMessage("hi, what's up? tudo bem?");
+		const nameInput = screen.getByPlaceholderText(/Jane Doe/i);
+		const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
+		const passwordInput = screen.getByPlaceholderText("•••••••");
+		await userEvent.type(nameInput, "oklidon");
+		await userEvent.type(emailInput, "bob@example.com");
+		await userEvent.type(passwordInput, "leslicornes++");
 
-		const contactUsButton = screen.getByRole("button", { name: /contactUs/i });
-		await userEvent.click(contactUsButton);
+		const loginButton = screen.getByRole("button", { name: /register/i });
+		await userEvent.click(loginButton);
 
-		expect(
-			await screen.findByText(/contactRequest.success/i),
-		).toBeInTheDocument();
-	});
-
-	test("when send contact request fails should display error toast", async () => {
-		const mockSendEmailSuccess = vi.fn().mockResolvedValue({ success: false });
-		renderRoute(Home, "/", mockSendEmailSuccess);
-
-		await writeContactRequestMessage("hi, what's up? tudo bem?");
-
-		const contactUsButton = screen.getByRole("button", { name: /contactUs/i });
-		await userEvent.click(contactUsButton);
-
-		expect(
-			await screen.findByText(/contactRequest.error/i),
-		).toBeInTheDocument();
+		expect(await screen.findByText(/registerError/i)).toBeInTheDocument();
 	});
 });
-
-async function writeContactRequestMessage(message: string) {
-	const messageInput: HTMLInputElement = screen.getByRole("textbox");
-
-	await userEvent.type(messageInput, message);
-}

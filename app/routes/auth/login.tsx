@@ -126,6 +126,7 @@ export default function Login() {
 										<FieldLabel htmlFor="email">{t("email")}</FieldLabel>
 										<Input
 											{...field}
+											name="email"
 											type="email"
 											placeholder="jane.doe@example.com"
 											aria-invalid={fieldState.invalid}
@@ -146,7 +147,9 @@ export default function Login() {
 										<FieldLabel htmlFor="password">{t("password")}</FieldLabel>
 										<Input
 											{...field}
+											name="password"
 											type="password"
+											placeholder="•••••••"
 											aria-invalid={fieldState.invalid}
 											required
 										/>

@@ -155,6 +155,7 @@ export default function Register() {
 										<Input
 											{...field}
 											type="password"
+											placeholder="•••••••"
 											aria-invalid={fieldState.invalid}
 											required
 										/>

@@ -11,13 +11,13 @@ describe("Home", () => {
 			renderRoute(Home, "/", mockSendEmail);
 		});
 
-		test("message is not long enough", async () => {
+		test("message too should display field error", async () => {
 			await writeContactRequestMessage("tiny");
 
 			expect(screen.getByText("form.messageTooShort")).toBeInTheDocument();
 		});
 
-		test("contactUs button disabled", async () => {
+		test("anyform field error should disable contact us button", async () => {
 			await writeContactRequestMessage("tiny");
 
 			const contactUsButton = screen.getByRole("button", {
@@ -27,7 +27,7 @@ describe("Home", () => {
 		});
 	});
 
-	test("when send contact request loading should disable button and display three dots", async () => {
+	test("when send email loading should disable contact usbutton", async () => {
 		const mockSendEmailLoading = vi
 			.fn()
 			.mockImplementation(() => new Promise(() => {}));
@@ -38,11 +38,11 @@ describe("Home", () => {
 		const contactUsButton = screen.getByRole("button", { name: /contactUs/i });
 		await userEvent.click(contactUsButton);
 
-		expect(contactUsButton).toHaveTextContent(/.../i);
 		expect(contactUsButton).toBeDisabled();
+		expect(contactUsButton).toHaveTextContent(/.../i);
 	});
 
-	test("when send contact request succeeds should display success toast", async () => {
+	test("when send email succeeds should display success toast", async () => {
 		const mockSendEmailSuccess = vi.fn().mockResolvedValue({ success: true });
 		renderRoute(Home, "/", mockSendEmailSuccess);
 
@@ -56,9 +56,9 @@ describe("Home", () => {
 		).toBeInTheDocument();
 	});
 
-	test("when send contact request fails should display error toast", async () => {
-		const mockSendEmailSuccess = vi.fn().mockResolvedValue({ success: false });
-		renderRoute(Home, "/", mockSendEmailSuccess);
+	test("when send email fails should display error toast", async () => {
+		const mockSendEmailError = vi.fn().mockResolvedValue({ success: false });
+		renderRoute(Home, "/", mockSendEmailError);
 
 		await writeContactRequestMessage("hi, what's up? tudo bem?");
 
