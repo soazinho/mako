@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { TFunction } from "i18next";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -11,13 +12,14 @@ import { Textarea } from "~/components/ui/textarea";
 import { sendEmail } from "~/server/email.server";
 import type { Route } from "./+types/home";
 
-const contactRequestSchema = z.object({
-	message: z.string().min(10, "Message must be at least 10 characters."),
-});
-
 export function meta() {
 	return [{ title: "Mako" }, { name: "description", content: "Mako - Home" }];
 }
+
+const contactRequestFormSchema = (t: TFunction) =>
+	z.object({
+		message: z.string().min(10, t("form.messageTooShort")),
+	});
 
 export async function action({ request }: Route.ActionArgs) {
 	const form = await request.formData();
@@ -38,18 +40,20 @@ export async function action({ request }: Route.ActionArgs) {
 export default function Home() {
 	const { t } = useTranslation();
 
+	const formSchema = contactRequestFormSchema(t);
+
 	const fetcher = useFetcher();
 	const busy = fetcher.state !== "idle";
 
-	const form = useForm<z.infer<typeof contactRequestSchema>>({
-		resolver: zodResolver(contactRequestSchema),
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
 		mode: "onChange",
 		defaultValues: {
 			message: "",
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof contactRequestSchema>) {
+	function onSubmit(data: z.infer<typeof formSchema>) {
 		fetcher.submit(data, {
 			method: "POST",
 			encType: "application/x-www-form-urlencoded",
@@ -95,12 +99,12 @@ export default function Home() {
 								className="bg-white"
 								cols={50}
 								rows={7}
-								placeholder="Enter your message here..."
+								placeholder={t("contactRequest.messagePlaceholder")}
 								aria-invalid={fieldState.invalid}
 								required
 							/>
 							<p className="text-muted-foreground text-sm">
-								Your message will be sent to Mako team.
+								{t("contactRequest.messageSent")}
 							</p>
 							{fieldState.invalid && <FieldError errors={[fieldState.error]} />}
 						</Field>

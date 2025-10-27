@@ -1,8 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { TFunction } from "i18next";
 import { GalleryVerticalEnd } from "lucide-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { data, Form, Link, redirect } from "react-router";
+import { useTranslation } from "react-i18next";
+import {
+	data,
+	Form,
+	Link,
+	redirect,
+	useActionData,
+	useNavigation,
+} from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -16,19 +25,17 @@ import {
 import { Input } from "~/components/ui/input";
 import { commitSession, getSession } from "~/server/session.server";
 import { login } from "~/server/user.server";
-
 import type { Route } from "./+types/login";
 
 export function meta() {
 	return [{ title: "Mako" }, { name: "description", content: "Mako - Login" }];
 }
 
-const loginFormSchema = z.object({
-	email: z.email(),
-	password: z
-		.string()
-		.min(8, { message: "Password must be at least 8 characters." }),
-});
+const loginFormSchema = (t: TFunction) =>
+	z.object({
+		email: z.email(t("form.emailInvalid")),
+		password: z.string().min(8, { message: t("form.passwordTooShort") }),
+	});
 
 export async function action({ request }: Route.ActionArgs) {
 	const session = await getSession(request.headers.get("Cookie"));
@@ -53,7 +60,6 @@ export async function action({ request }: Route.ActionArgs) {
 
 	session.set("userId", userId.toString());
 
-	// Login succeeded, send them to the protected page.
 	return redirect("/protected", {
 		headers: {
 			"Set-Cookie": await commitSession(session),
@@ -61,9 +67,18 @@ export async function action({ request }: Route.ActionArgs) {
 	});
 }
 
-export default function LoginPage({ actionData }: Route.ComponentProps) {
-	const form = useForm<z.infer<typeof loginFormSchema>>({
-		resolver: zodResolver(loginFormSchema),
+export default function Login() {
+	const { t } = useTranslation();
+	const actionData = useActionData();
+
+	const navigation = useNavigation();
+	const isSubmitting = navigation.formAction === "/login";
+
+	const formSchema = loginFormSchema(t);
+
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		mode: "onChange",
 		defaultValues: {
 			email: "",
 			password: "",
@@ -72,12 +87,12 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
 
 	useEffect(() => {
 		if (actionData?.error) {
-			toast.error("Error while login.", {
+			toast.error(t("loginError"), {
 				description: actionData?.error,
 				duration: 2000,
 			});
 		}
-	}, [actionData]);
+	}, [actionData, t]);
 
 	return (
 		<div className="flex flex-col h-screen w-full">
@@ -95,10 +110,11 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
 									</div>
 									<span className="sr-only">Mako</span>
 								</Link>
-								<h1 className="text-xl font-bold">Welcome to Mako.</h1>
+
+								<h1 className="text-xl font-bold">{t("slogans.welcome")}</h1>
 								<FieldDescription>
-									Don&apos;t have an account?{" "}
-									<Link to="/register">Register</Link>
+									{t("dontHaveAccount")}{" "}
+									<Link to="/register">{t("register")}</Link>
 								</FieldDescription>
 							</div>
 
@@ -107,7 +123,7 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
 								control={form.control}
 								render={({ field, fieldState }) => (
 									<Field data-invalid={fieldState.invalid}>
-										<FieldLabel htmlFor="email">Email</FieldLabel>
+										<FieldLabel htmlFor="email">{t("email")}</FieldLabel>
 										<Input
 											{...field}
 											type="email"
@@ -127,7 +143,7 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
 								control={form.control}
 								render={({ field, fieldState }) => (
 									<Field data-invalid={fieldState.invalid}>
-										<FieldLabel htmlFor="password">Password</FieldLabel>
+										<FieldLabel htmlFor="password">{t("password")}</FieldLabel>
 										<Input
 											{...field}
 											type="password"
@@ -142,7 +158,13 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
 							/>
 
 							<Field>
-								<Button type="submit">Login</Button>
+								<Button
+									disabled={!form.formState.isValid || isSubmitting}
+									className="cursor-pointer"
+									type="submit"
+								>
+									{isSubmitting ? "..." : t("login")}
+								</Button>
 							</Field>
 						</FieldGroup>
 					</Form>

@@ -1,8 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { TFunction } from "i18next";
 import { GalleryVerticalEnd } from "lucide-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { data, Form, Link, redirect } from "react-router";
+import { useTranslation } from "react-i18next";
+import {
+	data,
+	Form,
+	Link,
+	redirect,
+	useActionData,
+	useNavigation,
+} from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -15,7 +24,6 @@ import {
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { register } from "~/server/user.server";
-
 import type { Route } from "./+types/register";
 
 export function meta() {
@@ -25,13 +33,12 @@ export function meta() {
 	];
 }
 
-const registerFormSchema = z.object({
-	name: z.string().min(2, { message: "Name must be at least 5 characters." }),
-	email: z.email(),
-	password: z
-		.string()
-		.min(8, { message: "Password must be at least 8 characters." }),
-});
+const registerFormSchema = (t: TFunction) =>
+	z.object({
+		name: z.string().min(2, { message: t("form.nameTooShort") }),
+		email: z.email(t("form.emailInvalid")),
+		password: z.string().min(8, { message: t("form.passwordTooShort") }),
+	});
 
 export async function action({ request }: Route.ActionArgs) {
 	const form = await request.formData();
@@ -42,16 +49,24 @@ export async function action({ request }: Route.ActionArgs) {
 	const existerUser = await register({ name, email, password });
 
 	if (existerUser !== null) {
-		// Redirect back to the login page with errors.
 		return data({ error: "User already exists." });
 	}
 
 	return redirect("/login");
 }
 
-export default function RegisterPage({ actionData }: Route.ComponentProps) {
-	const form = useForm<z.infer<typeof registerFormSchema>>({
-		resolver: zodResolver(registerFormSchema),
+export default function Register() {
+	const { t } = useTranslation();
+	const actionData = useActionData();
+
+	const navigation = useNavigation();
+	const isSubmitting = navigation.formAction === "/register";
+
+	const formSchema = registerFormSchema(t);
+
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		mode: "onChange",
 		defaultValues: {
 			name: "",
 			email: "",
@@ -61,12 +76,12 @@ export default function RegisterPage({ actionData }: Route.ComponentProps) {
 
 	useEffect(() => {
 		if (actionData?.error) {
-			toast.error("Error while login.", {
+			toast.error(t("registerError"), {
 				description: actionData?.error,
 				duration: 2000,
 			});
 		}
-	}, [actionData]);
+	}, [actionData, t]);
 
 	return (
 		<div className="flex flex-col h-screen w-full">
@@ -84,9 +99,10 @@ export default function RegisterPage({ actionData }: Route.ComponentProps) {
 									</div>
 									<span className="sr-only">Mako</span>
 								</Link>
-								<h1 className="text-xl font-bold">Welcome to Mako.</h1>
+								<h1 className="text-xl font-bold">{t("slogans.welcome")}</h1>
 								<FieldDescription>
-									Already have an account? <Link to="/login">Login</Link>
+									{t("alreadyHaveAccount")}{" "}
+									<Link to="/login">{t("login")}</Link>
 								</FieldDescription>
 							</div>
 
@@ -95,7 +111,7 @@ export default function RegisterPage({ actionData }: Route.ComponentProps) {
 								control={form.control}
 								render={({ field, fieldState }) => (
 									<Field data-invalid={fieldState.invalid}>
-										<FieldLabel htmlFor="name">Name</FieldLabel>
+										<FieldLabel htmlFor="name">{t("name")}</FieldLabel>
 										<Input
 											{...field}
 											type="text"
@@ -115,7 +131,7 @@ export default function RegisterPage({ actionData }: Route.ComponentProps) {
 								control={form.control}
 								render={({ field, fieldState }) => (
 									<Field data-invalid={fieldState.invalid}>
-										<FieldLabel htmlFor="email">Email</FieldLabel>
+										<FieldLabel htmlFor="email">{t("email")}</FieldLabel>
 										<Input
 											{...field}
 											type="email"
@@ -135,7 +151,7 @@ export default function RegisterPage({ actionData }: Route.ComponentProps) {
 								control={form.control}
 								render={({ field, fieldState }) => (
 									<Field data-invalid={fieldState.invalid}>
-										<FieldLabel htmlFor="password">Password</FieldLabel>
+										<FieldLabel htmlFor="password">{t("password")}</FieldLabel>
 										<Input
 											{...field}
 											type="password"
@@ -149,9 +165,13 @@ export default function RegisterPage({ actionData }: Route.ComponentProps) {
 								)}
 							/>
 
-							<Field>
-								<Button type="submit">Register</Button>
-							</Field>
+							<Button
+								disabled={!form.formState.isValid || isSubmitting}
+								className="cursor-pointer"
+								type="submit"
+							>
+								{isSubmitting ? "..." : t("register")}
+							</Button>
 						</FieldGroup>
 					</Form>
 

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Form, Link, redirect } from "react-router";
+import { Form, Link, redirect, useLoaderData } from "react-router";
 import { LanguageSelect } from "~/components/language-select";
 import { Button } from "~/components/ui/button";
 import {
@@ -40,12 +40,14 @@ export async function loader({ context }: Route.LoaderArgs) {
 	return context.get(userContext);
 }
 
-export default function Protected({ loaderData }: Route.ComponentProps) {
+export default function Protected() {
+	const loaderData = useLoaderData();
+
 	const { t } = useTranslation();
 
 	return (
 		<div className="flex flex-col h-screen ">
-			<header className="flex justify-around py-4 border-b border-gray-200">
+			<header className="flex justify-between px-16 py-4 border-b border-gray-200">
 				<Link to="/">
 					<span className="text-2xl font-bold">Mako</span>
 				</Link>

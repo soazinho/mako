@@ -41,8 +41,6 @@ Your application will be available at `http://localhost:5173`.
 
 ### Database
 
-## Local
-
 Create Postgres databse:
 
 ```bash
@@ -69,9 +67,9 @@ Create a production build:
 npm run build
 ```
 
-## App Deployment
+### App Deployment
 
-### Docker Deployment
+#### Docker Deployment
 
 To build and run using Docker:
 
@@ -82,7 +80,7 @@ docker build -t mako .
 docker run -p 3000:3000 mako
 ```
 
-### Database Deployment
+#### Database Deployment
 
 WIP
 
