@@ -11,31 +11,27 @@ describe("Login", () => {
 			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
 			renderRoute(Login, "/", mockLogin);
 
-			const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
-			await userEvent.type(emailInput, "cwd");
+			await userEvent.type(ui.emailInput(), "cwd");
 
-			expect(screen.getByText(/form.emailInvalid/i)).toBeInTheDocument();
+			expect(ui.form.emailInvalidError()).toBeInTheDocument();
 		});
 
 		test("password too short should display field error", async () => {
 			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
 			renderRoute(Login, "/", mockLogin);
 
-			const passwordInput = screen.getByPlaceholderText("•••••••");
-			await userEvent.type(passwordInput, "tiny");
+			await userEvent.type(ui.passwordInput(), "tiny");
 
-			expect(screen.getByText("form.passwordTooShort")).toBeInTheDocument();
+			expect(ui.form.passwordTooShortError()).toBeInTheDocument();
 		});
 
 		test("anyform field error should disable login button", async () => {
 			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
 			renderRoute(Login, "/", mockLogin);
 
-			const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
-			await userEvent.type(emailInput, "dwq");
+			await userEvent.type(ui.emailInput(), "dwq");
 
-			const loginButton = screen.getByRole("button", { name: /login/i });
-			expect(loginButton).toBeDisabled();
+			expect(ui.loginButton()).toBeDisabled();
 		});
 	});
 
@@ -45,16 +41,14 @@ describe("Login", () => {
 			.mockImplementation(() => new Promise(() => {}));
 		renderRoute(Login, "/", mockLoginLoading);
 
-		const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
-		const passwordInput = screen.getByPlaceholderText("•••••••");
-		await userEvent.type(emailInput, "hi, what's up? tudo bem?");
-		await userEvent.type(passwordInput, "leslicornes++");
+		await userEvent.type(ui.emailInput(), "hi, what's up? tudo bem?");
+		await userEvent.type(ui.passwordInput(), "leslicornes++");
 
-		const loginButton = screen.getByRole("button", { name: /login/i });
-		await userEvent.click(loginButton);
+		const button = ui.loginButton();
+		await userEvent.click(button);
 
-		expect(loginButton).toBeDisabled();
-		expect(loginButton).toHaveTextContent(/.../i);
+		expect(button).toBeDisabled();
+		expect(button).toHaveTextContent(/.../i);
 	});
 
 	test("when login fails should display error toast", async () => {
@@ -63,14 +57,23 @@ describe("Login", () => {
 			.mockResolvedValue({ error: "an error occurred" });
 		renderRoute(Login, "/", mockLoginError);
 
-		const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
-		const passwordInput = screen.getByPlaceholderText("•••••••");
-		await userEvent.type(emailInput, "bob@example.com");
-		await userEvent.type(passwordInput, "leslicornes++");
+		await userEvent.type(ui.emailInput(), "bob@example.com");
+		await userEvent.type(ui.passwordInput(), "leslicornes++");
 
-		const loginButton = screen.getByRole("button", { name: /login/i });
-		await userEvent.click(loginButton);
+		await userEvent.click(ui.loginButton());
 
-		expect(await screen.findByText(/loginError/i)).toBeInTheDocument();
+		expect(await ui.loginError()).toBeInTheDocument();
 	});
 });
+
+const ui = {
+	emailInput: () => screen.getByPlaceholderText(/jane.doe@example.com/i),
+	passwordInput: () => screen.getByPlaceholderText("•••••••"),
+	loginButton: () => screen.getByRole("button", { name: /login/i }),
+	loginError: async () => await screen.findByText(/loginError/i),
+
+	form: {
+		emailInvalidError: () => screen.getByText(/form.emailInvalid/i),
+		passwordTooShortError: () => screen.getByText(/form.passwordTooShort/i),
+	},
+};

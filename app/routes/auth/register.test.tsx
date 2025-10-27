@@ -10,41 +10,36 @@ describe("Register", () => {
 			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
 			renderRoute(Register, "/", mockLogin);
 
-			const nameInput = screen.getByPlaceholderText(/Jane Doe/i);
-			await userEvent.type(nameInput, "1");
+			await userEvent.type(ui.nameInput(), "1");
 
-			expect(screen.getByText(/form.nameTooShort/i)).toBeInTheDocument();
+			expect(ui.form.nameTooShortError()).toBeInTheDocument();
 		});
 
 		test("email invalid should display field error", async () => {
 			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
 			renderRoute(Register, "/", mockLogin);
 
-			const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
-			await userEvent.type(emailInput, "cwd");
+			await userEvent.type(ui.emailInput(), "cwd");
 
-			expect(screen.getByText(/form.emailInvalid/i)).toBeInTheDocument();
+			expect(ui.form.emailInvalidError()).toBeInTheDocument();
 		});
 
 		test("password too short should display field error", async () => {
 			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
 			renderRoute(Register, "/", mockLogin);
 
-			const passwordInput = screen.getByPlaceholderText("•••••••");
-			await userEvent.type(passwordInput, "tiny");
+			await userEvent.type(ui.passwordInput(), "tiny");
 
-			expect(screen.getByText("form.passwordTooShort")).toBeInTheDocument();
+			expect(ui.form.passwordTooShort()).toBeInTheDocument();
 		});
 
 		test("anyform field error should disable register button", async () => {
 			const mockLogin = vi.fn().mockResolvedValue(() => Promise.resolve());
 			renderRoute(Register, "/", mockLogin);
 
-			const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
-			await userEvent.type(emailInput, "dwq");
+			await userEvent.type(ui.emailInput(), "dwq");
 
-			const registerButton = screen.getByRole("button", { name: /register/i });
-			expect(registerButton).toBeDisabled();
+			expect(ui.registerButton()).toBeDisabled();
 		});
 	});
 
@@ -54,18 +49,15 @@ describe("Register", () => {
 			.mockImplementation(() => new Promise(() => {}));
 		renderRoute(Register, "/", mockRegisterLoading);
 
-		const nameInput = screen.getByPlaceholderText(/Jane Doe/i);
-		const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
-		const passwordInput = screen.getByPlaceholderText("•••••••");
-		await userEvent.type(nameInput, "moakim");
-		await userEvent.type(emailInput, "hi, what's up? tudo bem?");
-		await userEvent.type(passwordInput, "leslicornes++");
+		await userEvent.type(ui.nameInput(), "moakim");
+		await userEvent.type(ui.emailInput(), "hi, what's up? tudo bem?");
+		await userEvent.type(ui.passwordInput(), "leslicornes++");
 
-		const registerButton = screen.getByRole("button", { name: /register/i });
-		await userEvent.click(registerButton);
+		const button = ui.registerButton();
+		await userEvent.click(button);
 
-		expect(registerButton).toBeDisabled();
-		expect(registerButton).toHaveTextContent(/.../i);
+		expect(button).toBeDisabled();
+		expect(button).toHaveTextContent(/.../i);
 	});
 
 	test("when register fails should display error toast", async () => {
@@ -74,16 +66,26 @@ describe("Register", () => {
 			.mockResolvedValue({ error: "an error occurred" });
 		renderRoute(Register, "/", mockLoginError);
 
-		const nameInput = screen.getByPlaceholderText(/Jane Doe/i);
-		const emailInput = screen.getByPlaceholderText(/jane.doe@example.com/i);
-		const passwordInput = screen.getByPlaceholderText("•••••••");
-		await userEvent.type(nameInput, "oklidon");
-		await userEvent.type(emailInput, "bob@example.com");
-		await userEvent.type(passwordInput, "leslicornes++");
+		await userEvent.type(ui.nameInput(), "oklidon");
+		await userEvent.type(ui.emailInput(), "bob@example.com");
+		await userEvent.type(ui.passwordInput(), "leslicornes++");
 
-		const loginButton = screen.getByRole("button", { name: /register/i });
-		await userEvent.click(loginButton);
+		await userEvent.click(ui.registerButton());
 
-		expect(await screen.findByText(/registerError/i)).toBeInTheDocument();
+		expect(await ui.registerError()).toBeInTheDocument();
 	});
 });
+
+const ui = {
+	nameInput: () => screen.getByPlaceholderText(/jane doe/i),
+	emailInput: () => screen.getByPlaceholderText(/jane.doe@example.com/i),
+	passwordInput: () => screen.getByPlaceholderText("•••••••"),
+	registerButton: () => screen.getByRole("button", { name: /register/i }),
+	registerError: async () => await screen.findByText(/registerError/i),
+
+	form: {
+		nameTooShortError: () => screen.getByText(/form.nameTooShort/i),
+		emailInvalidError: () => screen.getByText(/form.emailInvalid/i),
+		passwordTooShort: () => screen.getByText(/form.passwordTooShort/i),
+	},
+};

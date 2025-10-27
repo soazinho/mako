@@ -1,78 +1,78 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { renderRoute } from "~/lib/test-utils";
 import Home from "./home";
 
 describe("Home", () => {
 	describe("contact request form validation", () => {
-		beforeEach(() => {
+		test("message too short should display field error", async () => {
 			const mockSendEmail = vi.fn().mockResolvedValue({ success: true });
 			renderRoute(Home, "/", mockSendEmail);
-		});
 
-		test("message too should display field error", async () => {
-			await writeContactRequestMessage("tiny");
+			await userEvent.type(ui.messageInput(), "bob");
 
-			expect(screen.getByText("form.messageTooShort")).toBeInTheDocument();
+			expect(ui.form.messageTooShortError()).toBeInTheDocument();
 		});
 
 		test("anyform field error should disable contact us button", async () => {
-			await writeContactRequestMessage("tiny");
+			const mockSendEmail = vi.fn().mockResolvedValue({ success: true });
+			renderRoute(Home, "/", mockSendEmail);
 
-			const contactUsButton = screen.getByRole("button", {
-				name: /contactUs/i,
-			});
-			expect(contactUsButton).toBeDisabled();
+			await userEvent.type(ui.messageInput(), "bob");
+
+			expect(ui.contactUsButton()).toBeDisabled();
 		});
 	});
 
-	test("when send email loading should disable contact usbutton", async () => {
+	test("when send email loading should disable contact us button", async () => {
 		const mockSendEmailLoading = vi
 			.fn()
 			.mockImplementation(() => new Promise(() => {}));
 		renderRoute(Home, "/", mockSendEmailLoading);
 
-		await writeContactRequestMessage("hi, what's up? tudo bem?");
+		await userEvent.type(ui.messageInput(), "hi, what's up? tudo bem?");
 
-		const contactUsButton = screen.getByRole("button", { name: /contactUs/i });
-		await userEvent.click(contactUsButton);
+		const button = ui.contactUsButton();
+		await userEvent.click(button);
 
-		expect(contactUsButton).toBeDisabled();
-		expect(contactUsButton).toHaveTextContent(/.../i);
+		expect(button).toBeDisabled();
+		expect(button).toHaveTextContent(/.../i);
 	});
 
 	test("when send email succeeds should display success toast", async () => {
 		const mockSendEmailSuccess = vi.fn().mockResolvedValue({ success: true });
 		renderRoute(Home, "/", mockSendEmailSuccess);
 
-		await writeContactRequestMessage("hi, what's up? tudo bem?");
+		await userEvent.type(ui.messageInput(), "hi, what's up? tudo bem?");
 
-		const contactUsButton = screen.getByRole("button", { name: /contactUs/i });
-		await userEvent.click(contactUsButton);
+		await userEvent.click(ui.contactUsButton());
 
-		expect(
-			await screen.findByText(/contactRequest.success/i),
-		).toBeInTheDocument();
+		expect(await ui.contactRequestSuccess()).toBeInTheDocument();
 	});
 
 	test("when send email fails should display error toast", async () => {
 		const mockSendEmailError = vi.fn().mockResolvedValue({ success: false });
 		renderRoute(Home, "/", mockSendEmailError);
 
-		await writeContactRequestMessage("hi, what's up? tudo bem?");
+		await userEvent.type(ui.messageInput(), "hi, what's up? tudo bem?");
 
-		const contactUsButton = screen.getByRole("button", { name: /contactUs/i });
-		await userEvent.click(contactUsButton);
+		await userEvent.click(ui.contactUsButton());
 
-		expect(
-			await screen.findByText(/contactRequest.error/i),
-		).toBeInTheDocument();
+		expect(await ui.contactRequestError()).toBeInTheDocument();
 	});
 });
 
-async function writeContactRequestMessage(message: string) {
-	const messageInput: HTMLInputElement = screen.getByRole("textbox");
+const ui = {
+	messageInput: () =>
+		screen.getByPlaceholderText(/contactRequest.messagePlaceholder/i),
+	contactUsButton: () => screen.getByRole("button", { name: /contactUs/i }),
+	contactRequestSuccess: async () =>
+		await screen.findByText(/contactRequest.success/i),
+	contactRequestError: async () =>
+		await screen.findByText(/contactRequest.error/i),
 
-	await userEvent.type(messageInput, message);
-}
+	form: {
+		messageTooShortError: () => screen.getByText(/form.messageTooShort/i),
+	},
+};
