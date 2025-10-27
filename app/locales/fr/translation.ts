@@ -29,8 +29,7 @@ export default {
 	form: {
 		nameTooShort: "Le nom doit contenir au moins 2 caractères.",
 		emailInvalid: "Adresse e-mail invalide.",
-		passwordTooShort:
-			"Le mot de passe doit contenir au moins 8 caractères.",
+		passwordTooShort: "Le mot de passe doit contenir au moins 8 caractères.",
 		messageTooShort: "Le message doit contenir au moins 10 caractères.",
 	},
 
