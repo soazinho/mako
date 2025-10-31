@@ -4,14 +4,7 @@ import { GalleryVerticalEnd } from "lucide-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import {
-	data,
-	Form,
-	Link,
-	redirect,
-	useActionData,
-	useNavigation,
-} from "react-router";
+import { data, Form, Link, redirect, useNavigation } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -55,9 +48,8 @@ export async function action({ request }: Route.ActionArgs) {
 	return redirect("/login");
 }
 
-export default function Register() {
+export default function Register({ actionData }: Route.ComponentProps) {
 	const { t } = useTranslation();
-	const actionData = useActionData();
 
 	const navigation = useNavigation();
 	const isSubmitting = navigation.formAction === "/register";

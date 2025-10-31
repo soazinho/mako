@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Form, Link, redirect, useLoaderData } from "react-router";
+import { Form, Link, redirect } from "react-router";
 import { LanguageSelect } from "~/components/language-select";
 import { Button } from "~/components/ui/button";
 import {
@@ -40,9 +40,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 	return context.get(userContext);
 }
 
-export default function Protected() {
-	const loaderData = useLoaderData();
-
+export default function Protected({ loaderData }: Route.ComponentProps) {
 	const { t } = useTranslation();
 
 	return (
