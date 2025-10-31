@@ -6,4 +6,5 @@
 /.react-router/
 /build/
 
-coverage/
+# Vitest
+/coverage/

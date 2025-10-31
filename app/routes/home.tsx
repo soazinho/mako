@@ -53,8 +53,8 @@ export default function Home() {
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof formSchema>) {
-		fetcher.submit(data, {
+	async function onSubmit(data: z.infer<typeof formSchema>) {
+		await fetcher.submit(data, {
 			method: "POST",
 			encType: "application/x-www-form-urlencoded",
 		});
