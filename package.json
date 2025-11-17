@@ -61,7 +61,7 @@
 		"@types/pg": "^8.15.5",
 		"@types/react": "^19.2.2",
 		"@types/react-dom": "^19.2.2",
-		"@vitest/coverage-v8": "^4.0.1",
+		"@vitest/coverage-v8": "^4.0.5",
 		"drizzle-kit": "^0.31.5",
 		"happy-dom": "^20.0.8",
 		"tailwindcss": "^4.1.13",
@@ -70,6 +70,7 @@
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7",
 		"vite-tsconfig-paths": "^5.1.4",
-		"vitest": "^4.0.1"
+		"vitest": "^4.0.5",
+		"vitest-browser-react": "^2.0.2"
 	}
 }

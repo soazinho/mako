@@ -5,9 +5,9 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
 	plugins: [
-		!process.env.VITEST && reactRouter(),
 		tailwindcss(),
 		tsconfigPaths(),
+		!process.env.VITEST && reactRouter(),
 	],
 	test: {
 		globals: true,
