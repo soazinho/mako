@@ -7,8 +7,7 @@ import Home from "./home";
 describe("Home", () => {
 	describe("contact request form validation", () => {
 		test("message too short should display field error", async () => {
-			const mockSendEmail = vi.fn().mockResolvedValue({ success: true });
-			renderRoute(Home, "/", mockSendEmail);
+			renderRoute(Home, "");
 
 			await userEvent.type(ui.messageInput(), "bob");
 
@@ -16,28 +15,27 @@ describe("Home", () => {
 		});
 
 		test("anyform field error should disable contact us button", async () => {
-			const mockSendEmail = vi.fn().mockResolvedValue({ success: true });
-			renderRoute(Home, "/", mockSendEmail);
+			renderRoute(Home, "");
 
 			await userEvent.type(ui.messageInput(), "bob");
 
 			expect(ui.contactUsButton()).toBeDisabled();
 		});
-	});
 
-	test("when send email loading should disable contact us button", async () => {
-		const mockSendEmailLoading = vi
-			.fn()
-			.mockImplementation(() => new Promise(() => {}));
-		renderRoute(Home, "/", mockSendEmailLoading);
+		test("when send email loading should disable contact us button", async () => {
+			const mockSendEmailLoading = vi
+				.fn()
+				.mockImplementation(() => new Promise(() => {}));
+			renderRoute(Home, "/", mockSendEmailLoading);
 
-		await userEvent.type(ui.messageInput(), "hi, what's up? tudo bem?");
+			await userEvent.type(ui.messageInput(), "hi, what's up? tudo bem?");
 
-		const button = ui.contactUsButton();
-		await userEvent.click(button);
+			const button = ui.contactUsButton();
+			await userEvent.click(button);
 
-		expect(button).toBeDisabled();
-		expect(button).toHaveTextContent(/.../i);
+			expect(button).toBeDisabled();
+			expect(button).toHaveTextContent(/.../i);
+		});
 	});
 
 	test("when send email succeeds should display success toast", async () => {
