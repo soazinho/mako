@@ -19,12 +19,12 @@ describe("hasPermission", () => {
 			condition: "greater than",
 			expectedResult: true,
 		},
-	])(
-		`when role is $condition required role should return $expectedResult `,
-		({ input, expectedResult }) => {
-			const result = hasPermission(input.role, input.requiredRole);
+	])(`when role is $condition required role should return $expectedResult `, ({
+		input,
+		expectedResult,
+	}) => {
+		const result = hasPermission(input.role, input.requiredRole);
 
-			expect(result).toBe(expectedResult);
-		},
-	);
+		expect(result).toBe(expectedResult);
+	});
 });
